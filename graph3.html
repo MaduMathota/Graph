@@ -1,0 +1,83 @@
+<style>
+  #chartdiv {
+    width: 100%;
+    height: 500px;
+  }
+</style>
+
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<script>
+  am5.ready(function () {
+
+    var root = am5.Root.new("chartdiv");
+
+    root.setThemes([
+      am5themes_Animated.new(root)
+    ]);
+
+    var chart = root.container.children.push(am5xy.XYChart.new(root, {
+    }));
+
+
+    var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+      behavior: "none"
+    }));
+
+
+    cursor.lineX.setAll({
+      visible: true,
+      stroke: am5.color("#FF0000"),
+      strokeWidth: 6, 
+      strokeDasharray: ''
+    });
+
+    cursor.lineY.set("visible", false);
+
+    //dummy data
+    var data = [
+      { x: 2.3, y: 0.25 },
+      { x: 4, y: 0.42 },
+      { x: 5, y: 0.25 },
+      { x: 5.5, y: 0.07 },
+      { x: 7, y: 0 }
+
+    ];
+
+    var yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        min: 0,
+        max: 0.45,
+        interval: 0.5,
+        renderer: am5xy.AxisRendererY.new(root, {}),
+      })
+    );
+
+
+    var xAxis = chart.xAxes.push(
+      am5xy.ValueAxis.new(root, {
+        min: 0,
+        max: 8,
+        interval: 2,
+        renderer: am5xy.AxisRendererX.new(root, {})
+      })
+    );
+
+    var series = chart.series.push(am5xy.SmoothedXYLineSeries.new(root, {
+      xAxis: xAxis,
+      yAxis: yAxis,
+      valueYField: "y",
+      valueXField: "x",
+      tooltip: am5.Tooltip.new(root, {
+        labelText: "{valueY}"
+      })
+    }));
+
+    xAxis.data.setAll(data);
+    series.data.setAll(data);
+  });
+</script>
+
+<div id="chartdiv"></div>
